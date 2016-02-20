@@ -4,7 +4,8 @@
    [devcards.core :as dc]
    [reactions-demo.a1-non-reaction]
    [reactions-demo.a2-non-reaction]
-   [reactions-demo.b1-reactions]))
+   [reactions-demo.b1-reactions]
+   [reactions-demo.b3-reactions]))
 
 (enable-console-print!)
 

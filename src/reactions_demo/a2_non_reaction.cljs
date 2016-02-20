@@ -1,12 +1,12 @@
 (ns reactions-demo.a2-non-reaction
   (:require
-    [reagent.core :as rc]
-    [devcards.core :as dc]
-    [cljs.core.async :refer [<! chan >!]]
-    [reactions-demo.helpers :refer [slider update-chan track-update counter]])
+   [reagent.core :as rc]
+   [devcards.core :as dc]
+   [cljs.core.async :refer [<! chan >!]]
+   [reactions-demo.helpers :refer [slider update-chan track-update counter reset-counter nav-links]])
   (:require-macros
-    [cljs.core.async.macros :refer [go go-loop]]
-    [devcards.core :as dc :refer [defcard defcard-doc]]))
+   [cljs.core.async.macros :refer [go go-loop]]
+   [devcards.core :as dc :refer [defcard defcard-doc]]))
 
 (defn non-reaction-component
   [value children]
@@ -33,7 +33,7 @@
                              (go (>! update-chan :render))  ;; track renders
                              [:span {:style {:background-color (if (< 50 (-> @value :val))
                                                                  "red"
-                                                                 "green")}} ""])
+                                                                 "green")}} "."])
      :component-did-update (track-update "child") ;; and track updates
      }))
 
@@ -44,6 +44,8 @@
                                    ;; each child does the same calculation :-/
                                    ^{:key (str "child-" c)}
                                    [child value])]])
+
+(defcard (rc/as-element [nav-links]))
 
 (defcard loads-of-children
          "## Render storm.
@@ -61,18 +63,11 @@
   counter
   {:history false
    :frame false})
+(defcard
+  (fn [_ _]
+    (rc/as-element [reset-counter]))
+  nil)
 
 (defcard-doc
   (dc/mkdn-pprint-source child)
   (dc/mkdn-pprint-source lots-of-children))
-
-(defcard
-  (fn [_ _]
-    (rc/as-element [:button {:on-click (fn [_]
-                                         (reset! counter {:render 0
-                                                          :update 0}))}
-                    "Reset counters"]))
-  nil)
-
-(defcard-doc
-  "[Prev](#!/reactions_demo.a1_non_reaction) [Next](#!/reactions_demo.b1_reactions)")

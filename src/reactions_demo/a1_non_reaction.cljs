@@ -2,7 +2,7 @@
   (:require
     [reagent.core :as rc]
     [devcards.core :as dc]
-    [reactions-demo.helpers :refer [slider update-chan track-update counter]])
+    [reactions-demo.helpers :refer [slider update-chan track-update counter reset-counter nav-links]])
   (:require-macros
     [cljs.core.async.macros :refer [go]]
     [devcards.core :as dc :refer [defcard defcard-doc]]))
@@ -23,20 +23,19 @@
      ;; and this one too ☟
      (track-update "Static-text component updated")}))
 
+(defcard
+  (rc/as-element [nav-links]))
+
 (defcard-doc
   "## The difference between `ratom`s and `reaction`s.\n\n
 
   Accessing `ratom`s directly works well, but it just doesn't scale.
 
-  ## Code for the non-reaction component.
-
-   We access the `ratom` directly. Each time it changes, we will re-render."
+  We access the `ratom` directly. Each time it changes, we will re-render."
   (dc/mkdn-pprint-source non-reaction-component))
 
 (defcard
-  "### A slider where we react directly to the change event.
-
-   Notice how many times `non-reaction-component` is re-rendered even
+  "Notice how many times `non-reaction-component` is re-rendered even
    though the component does not need to update all that frequently.
 
    What happens when that component has many sub-components?"
@@ -54,11 +53,5 @@
 
 (defcard
   (fn [_ _]
-    (rc/as-element [:button {:on-click (fn [_]
-                                         (reset! counter {:render 0
-                                                          :update 0}))}
-                    "Reset counters"]))
+    (rc/as-element [reset-counter]))
   nil)
-
-(defcard-doc
-  "[Next](#!/reactions_demo.a2_non_reaction)")
