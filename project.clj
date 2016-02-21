@@ -1,6 +1,6 @@
 (defproject reactions-demo "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
+  :description "Demo code showing the benefits of reactions in reagent"
+  :url "https://github.com/davidjameshumphreys/cljs-reactions-demo"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
@@ -24,32 +24,23 @@
 
   :source-paths ["src"]
 
-  :cljsbuild {
-              :builds [{:id "devcards"
+  :cljsbuild {:builds [{:id           "devcards"
                         :source-paths ["src"]
-                        :figwheel { :devcards true } ;; <- note this
-                        :compiler { :main       "reactions-demo.core"
-                                    :asset-path "js/compiled/devcards_out"
-                                    :output-to  "resources/public/js/compiled/reactions_demo_devcards.js"
-                                    :output-dir "resources/public/js/compiled/devcards_out"
-                                    :source-map-timestamp true }}
-                       {:id "dev"
+                        :figwheel     {:devcards true}
+                        :compiler     {:main                 "reactions-demo.core"
+                                       :asset-path           "js/compiled/devcards_out"
+                                       :output-to            "resources/public/js/compiled/reactions_demo_devcards.js"
+                                       :output-dir           "resources/public/js/compiled/devcards_out"
+                                       :source-map-timestamp true }}
+                       {:id           "prod"
                         :source-paths ["src"]
-                        :figwheel true
-                        :compiler {:main       "reactions-demo.core"
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/reactions_demo.js"
-                                   :output-dir "resources/public/js/compiled/out"
-                                   :source-map-timestamp true }}
-                       {:id "prod"
-                        :source-paths ["src"]
-                        :compiler {:main           "reactions-demo.core"
-                                   :asset-path     "js/compiled/"
-                                   :devcards       true
-                                   :output-dir     "resources/public/js/compiled/"
-                                   :source-map     "resources/public/js/compiled/reactions_demo_devcards.js.map"
-                                   :output-to      "resources/public/js/compiled/reactions_demo_devcards.js"
-                                   :optimizations  :advanced
-                                   :parallel-build true}}]}
+                        :compiler     {:main           "reactions-demo.core"
+                                       :asset-path     "js/compiled/"
+                                       :devcards       true
+                                       :output-dir     "resources/public/js/compiled/"
+                                       :source-map     "resources/public/js/compiled/reactions_demo_devcards.js.map"
+                                       :output-to      "resources/public/js/compiled/reactions_demo_devcards.js"
+                                       :optimizations  :advanced
+                                       :parallel-build true}}]}
 
   :figwheel { :css-dirs ["resources/public/css"] })
