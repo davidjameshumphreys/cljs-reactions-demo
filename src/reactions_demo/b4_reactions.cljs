@@ -71,8 +71,7 @@
         [:div#chart
          ""])
       :component-will-update
-      (fn [_ _]
-        (println "."))
+      (fn [_ _])
       :component-will-unmount
       (fn [_]
         (remove-watch value :watch-data))
@@ -93,6 +92,13 @@
                                                     :inner (b bt)
                                                     :val   val}))))))))
         (reset! the-div (js/Chartist.Line. "#chart" (clj->js @processed-data) options)))})))
+
+(defcard-doc
+  "## Signals everywhere
+
+  Reactions are a great place to read values from `ratom`s and
+  `cursor`s and apply logic, there will be fewer updates to your
+  components.  Everyone wins :)")
 
 (defcard
   (fn [value _]
