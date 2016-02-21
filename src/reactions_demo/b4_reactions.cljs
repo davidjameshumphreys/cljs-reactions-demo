@@ -48,10 +48,12 @@
                                  :axisX         {:showGrid  false
                                                  :showLabel false
                                                  :ticks     [0 25 50 75 100]}
-                                 :axisY         {:showGrid  false
+                                 :axisY         {:showGrid  true
                                                  :showLabel false
-                                                 :ticks     [0 25 50 75 100]}
+                                                 :ticks     [50 75]}
                                  :showPoint     false
+                                 :high          100
+                                 :low           0
                                  :showArea      false
                                  :lineSmooth    false
                                  :chartPadding  {:right 40}
