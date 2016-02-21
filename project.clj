@@ -8,7 +8,8 @@
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.170"]
-                 [devcards "0.2.1-5"]
+                 [devcards "0.2.1-5"
+                  :exclusions [cljsjs/react]]
                  [sablono "0.5.3"]
 
                  [reagent "0.6.0-alpha" :exclusions [cljsjs/react]]
@@ -42,9 +43,13 @@
                                    :source-map-timestamp true }}
                        {:id "prod"
                         :source-paths ["src"]
-                        :compiler {:main       "reactions-demo.core"
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/reactions_demo.js"
-                                   :optimizations :advanced}}]}
+                        :compiler {:main           "reactions-demo.core"
+                                   :asset-path     "js/compiled/"
+                                   :devcards       true
+                                   :output-dir     "resources/public/js/compiled/"
+                                   :source-map     "resources/public/js/compiled/reactions_demo_devcards.js.map"
+                                   :output-to      "resources/public/js/compiled/reactions_demo_devcards.js"
+                                   :optimizations  :advanced
+                                   :parallel-build true}}]}
 
   :figwheel { :css-dirs ["resources/public/css"] })

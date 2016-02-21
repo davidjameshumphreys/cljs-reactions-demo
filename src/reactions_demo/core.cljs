@@ -1,7 +1,7 @@
 (ns reactions-demo.core
   (:require
    [sablono.core :as sab :include-macros true]
-   [devcards.core :as dc]
+   [devcards.core :as dc :refer-macros [start-devcard-ui!]]
    [reactions-demo.a1-non-reaction]
    [reactions-demo.a2-non-reaction]
    [reactions-demo.b1-reactions]
@@ -10,10 +10,4 @@
 
 (enable-console-print!)
 
-(defn main []
-  ;; conditionally start the app based on whether the #main-app-area
-  ;; node is on the page
-  (if-let [node (.getElementById js/document "main-app-area")]
-    (js/React.render (sab/html [:div ""]) node)))
-
-(main)
+(start-devcard-ui!)
