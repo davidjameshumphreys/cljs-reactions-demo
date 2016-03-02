@@ -14,7 +14,10 @@
 
                  [reagent "0.6.0-alpha" :exclusions [cljsjs/react]]
                  [cljsjs/react-with-addons "0.14.3-0"]
-                 [cljsjs/chartist "0.9.4-2"]]
+                 [cljsjs/chartist "0.9.4-2"]
+                 [prismatic/schema "1.0.5"]
+                 [metosin/schema-tools "0.7.0"]
+                 [org.clojure/test.check "0.9.0"]]
 
   :plugins [[lein-figwheel "0.5.0-6"]
             [lein-cljsbuild "1.1.2" :exclusions [org.clojure/clojure]]]
@@ -28,6 +31,7 @@
                         :source-paths ["src"]
                         :figwheel     {:devcards true}
                         :compiler     {:main                 "reactions-demo.core"
+                                       :warnings             {:fn-deprecated false}
                                        :asset-path           "js/compiled/devcards_out"
                                        :output-to            "resources/public/js/compiled/reactions_demo_devcards.js"
                                        :output-dir           "resources/public/js/compiled/devcards_out"
