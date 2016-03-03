@@ -1,7 +1,7 @@
 (ns ^:figwheel-always reactions-demo.c1-schemas
   (:require [cljs.test :refer-macros [is testing]]
             [clojure.string :as str]
-            [devcards.core :as dc :refer-macros [defcard defcard-doc mkdn-pprint-source deftest]]
+            [devcards.core :as dc :refer-macros [defcard defcard-doc mkdn-pprint-source deftest mkdn-pprint-code]]
             [reagent.core :as rc]
             [schema.coerce :as coerce]
             [schema.core :as schema]
@@ -93,7 +93,12 @@ If we don't use a coercer, as soon as we get the data, we should normalise it."
 
   "The `coercer` function returns a _function_. Pass the input data to this function.
 
-When using a coercer, you can't just check `nil?`, you must check if it is an error-type.")
+When using a coercer, you can't just check `nil?`, you must check if it is an error-type."
+  (mkdn-pprint-code '(let [ret (LoginCoercer {:email "input data"})]
+                       (if (sutils/error? ret)
+                         (println "Error state.")
+                         (println "Good, coerced, data")))
+   ))
 
 (deftest coerced-schema-check
   "## Testing with a coercion"
@@ -109,8 +114,7 @@ When using a coercer, you can't just check `nil?`, you must check if it is an er
            (type (LoginCoercer {}))))
 
     (testing "but you can easily check for an error:"
-      (is (sutils/error? (LoginCoercer {:terrible "data"}))))
-    ))
+      (is (sutils/error? (LoginCoercer {:terrible "data"}))))))
 
 (def CSVNumbers
   [schema/Int])
@@ -122,27 +126,34 @@ When using a coercer, you can't just check `nil?`, you must check if it is an er
    :numbers CSVNumbers})
 
 (def BigSchemaCoercer
-  (coerce/coercer BigSchema {schema/Int (coerce/safe (fn [x]
-                                                       (some-> x
-                                                               str/trim
-                                                               (str/replace #"[^0-9]" "")
-                                                               (js/parseInt))))
-                             schema/Str (coerce/safe (fn [x]
-                                                       (some-> x
-                                                               str/trim
-                                                               str/lower-case)))
-                             ;; Doing some crazy datastructure building...
-                             CSVNumbers (coerce/safe (fn [x]
-                                                       (as-> x x
-                                                         ;; split on comma
-                                                         (str/split x #",")
-                                                         ;; remove non-digits
-                                                         (map (fn [t]
-                                                                (str/replace t #"[^0-9]" "")) x)
-                                                         ;; get rid of empty strings
-                                                         (remove empty? x)
-                                                         ;; make a vector of ints
-                                                         (mapv js/parseInt x))))}))
+  (coerce/coercer BigSchema
+                  {schema/Int (coerce/safe (fn [x]
+                                             (some-> x
+                                                     str/trim
+                                                     (str/replace #"[^0-9]" "")
+                                                     (js/parseInt))))
+                   schema/Str (coerce/safe (fn [x]
+                                             (some-> x
+                                                     str/trim
+                                                     str/lower-case)))
+                   ;; Doing some crazy datastructure building...
+                   CSVNumbers (coerce/safe (fn [x]
+                                             (as-> x x
+                                               ;; split on comma
+                                               (str/split x #",")
+                                               ;; remove non-digits
+                                               (map (fn [t]
+                                                      (str/replace t #"[^0-9]" "")) x)
+                                               ;; get rid of empty strings
+                                               (remove empty? x)
+                                               ;; make a vector of ints
+                                               (mapv js/parseInt x))))}))
+
+(def coerced (BigSchemaCoercer {:num     "   54"
+                                :field1  "  BIG & small TeXt "
+                                :field2  " something "
+                                :numbers " 0,  5,,,d,10,25    ,bad,9"}))
+
 
 (defcard-doc
   "## Dealing with complex types:
@@ -151,32 +162,31 @@ There is no reason to stick with simple strings, you can coerce to
 anything that you wish."
   (mkdn-pprint-source BigSchema)
   (mkdn-pprint-source CSVNumbers)
-  (mkdn-pprint-source BigSchemaCoercer))
+  (mkdn-pprint-source BigSchemaCoercer)
 
-(def coerced (BigSchemaCoercer {:num     "   54"
-                                :field1  "  BIG & small TeXt "
-                                :field2  " something "
-                                :numbers " 0,  5,,,d,10,25    ,bad,9"}))
-
-(defcard-doc
   "Some data that has been coerced"
   (mkdn-pprint-source coerced))
 
+
 (deftest coerced-continued
   "## If you can coerce it...
+
 
 By using coercers, it is possible to validate the input data _but
 also_ get your data into a good state.
 
 Below, we have built `:numbers` in to a vector as we validate the input."
   (testing "A bigger example:"
-    (is (= 54
-           (:num coerced)))
-    (is (= "big & small text"
-           (:field1 coerced)))
+    (testing "we made a number from the string"
+      (is (= 54
+             (:num coerced))))
+    (testing "we cleaned the string"
+      (is (= "big & small text"
+             (:field1 coerced))))
 
-    (is (= [0 5 10 25 9]
-           (:numbers coerced)))))
+    (testing "we made a vector from the string"
+      (is (= [0 5 10 25 9]
+             (:numbers coerced))))))
 
 
 (defcard-doc
