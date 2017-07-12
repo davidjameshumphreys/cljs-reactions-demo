@@ -7,7 +7,8 @@
    [reactions-demo.b1-reactions]
    [reactions-demo.b3-reactions]
    [reactions-demo.b4-reactions]
-   [reactions-demo.c1-schemas]))
+   [reactions-demo.c1-schemas]
+   [reactions-demo.words]))
 
 (enable-console-print!)
 
