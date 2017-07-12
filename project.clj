@@ -17,11 +17,14 @@
                  [cljsjs/chartist "0.9.4-2"]
                  [prismatic/schema "1.0.5"]
                  [metosin/schema-tools "0.7.0"]
-                 [org.clojure/test.check "0.9.0"]]
+                 [org.clojure/test.check "0.9.0"]
+                 [figwheel-sidecar "0.5.0-6"]
+                 [com.cemerick/piggieback "0.2.1"]]
 
   :plugins [[lein-figwheel "0.5.0-6"]
             [lein-cljsbuild "1.1.2" :exclusions [org.clojure/clojure]]]
 
+  :repl-options {"nrepl-middleware" [cemerick.piggieback/wrap-cljs-repl]}
   :clean-targets ^{:protect false} ["resources/public/js/compiled"
                                     "target"]
 
@@ -35,15 +38,17 @@
                                        :asset-path           "js/compiled/devcards_out"
                                        :output-to            "resources/public/js/compiled/reactions_demo_devcards.js"
                                        :output-dir           "resources/public/js/compiled/devcards_out"
-                                       :source-map-timestamp true }}
+                                       :parallel-build       true
+                                       :source-map-timestamp true}}
                        {:id           "prod"
                         :source-paths ["src"]
                         :compiler     {:main           "reactions-demo.core"
                                        :asset-path     "js/compiled/"
                                        :devcards       true
-                                       :output-dir     "resources/public/js/compiled/"
-                                       :source-map     "resources/public/js/compiled/reactions_demo_devcards.js.map"
-                                       :output-to      "resources/public/js/compiled/reactions_demo_devcards.js"
+                                       :warnings       {:fn-deprecated false}
+                                       :output-dir     "js/compiled/"
+                                       :source-map     "js/compiled/reactions_demo_devcards.js.map"
+                                       :output-to      "js/compiled/reactions_demo_devcards.js"
                                        :optimizations  :advanced
                                        :parallel-build true}}]}
 
