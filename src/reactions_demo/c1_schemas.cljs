@@ -5,7 +5,8 @@
             [reagent.core :as rc]
             [schema.coerce :as coerce]
             [schema.core :as schema]
-            [schema.utils :as sutils]))
+            [schema.utils :as sutils]
+            [reactions-demo.helpers :refer [nav-links]]))
 
 (def Email (schema/both
             schema/Str
@@ -32,6 +33,9 @@
     ;; We update the incoming data that we know is validated
     ;; correctly.
     (update-in data [:email] str/lower-case)))
+
+(defcard
+  (rc/as-element [nav-links]))
 
 (defcard-doc
   "## Schemas & Coercers
